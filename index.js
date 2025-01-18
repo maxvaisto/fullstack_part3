@@ -88,12 +88,17 @@ app.post('/api/persons', (request, response) => {
   }
 
   const person = {
-    id: Math.floor(Math.random() * 1000),
+    id: '' + Math.floor(Math.random() * 1000),
     name: body.name,
     number: body.number
   }
   phonebook = phonebook.concat(person)
   response.json(person)
+})
+
+app.delete('/api/persons/:id', (request, response) => {
+  phonebook = phonebook.filter(person => person.id !== request.params.id)
+  response.status(204).end()
 })
 
 app.get('/info', (request, response) => {
