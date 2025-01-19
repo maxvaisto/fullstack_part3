@@ -4,7 +4,6 @@ const app = express()
 var morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/person')
-const mongoose = require('mongoose')
 
 
 app.use(cors())
@@ -13,7 +12,7 @@ app.use(express.static('dist'))
 
 
 app.use(morgan(function (tokens, req, res) {
-  if (req.method === "POST") {
+  if (req.method === 'POST') {
     return [
       tokens.method(req, res),
       tokens.url(req, res),
@@ -21,7 +20,7 @@ app.use(morgan(function (tokens, req, res) {
       tokens.res(req, res, 'content-length'), '-',
       tokens['response-time'](req, res), 'ms',
       JSON.stringify(req.body),
-    ].join(' ');
+    ].join(' ')
   }
   return [
     tokens.method(req, res),
@@ -30,8 +29,8 @@ app.use(morgan(function (tokens, req, res) {
     tokens.res(req, res, 'content-length'), '-',
     // response time
     tokens['response-time'](req, res), 'ms',
-  ].join(' ');
-}));
+  ].join(' ')
+}))
 
 
 app.get('/', (request, response) => {
@@ -95,14 +94,14 @@ app.post('/api/persons', (request, response, next) => {
     })
   }
 
-  Person.find({name: body.name}).then(result =>
-    {
-      if (result.length > 0) {
-        return response.status(400).json({
-          error: 'name must be unique'
-        })
-      }
+  Person.find({ name: body.name }).then(result =>
+  {
+    if (result.length > 0) {
+      return response.status(400).json({
+        error: 'name must be unique'
+      })
     }
+  }
   )
     .catch(
       error => next(error)
@@ -114,7 +113,7 @@ app.post('/api/persons', (request, response, next) => {
     number: body.number
   })
 
-  person.save({runValidators: true, context:'query'}).then(savedPerson => {
+  person.save({ runValidators: true, context:'query' }).then(savedPerson => {
     response.json(savedPerson)
   })
     .catch(
@@ -126,7 +125,7 @@ app.post('/api/persons', (request, response, next) => {
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
-  Person.findByIdAndDelete(request.params.id).then(result => {
+  Person.findByIdAndDelete(request.params.id).then(() => {
     response.status(204).end()
   })
     .catch(
